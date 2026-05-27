@@ -1,4 +1,5 @@
 import { useEffect, useRef, useState } from "react";
+import { createPortal } from "react-dom";
 import { Clock, Layers, MapPin, Play } from "lucide-react";
 import type { TaskEntry } from "../lib/tasks";
 import { formatDuration } from "../lib/tasks";
@@ -199,19 +200,23 @@ function TaskModal({
       document.body.style.overflow = prev;
     };
   }, [onClose]);
-  return (
+
+  // Render via portal so the modal escapes any transformed ancestor
+  // (e.g. the .reveal grid) — `position: fixed` would otherwise be
+  // anchored to that ancestor's box, which throws the modal off-centre.
+  return createPortal(
     <div
       role="dialog"
       aria-modal="true"
       aria-label={display}
       onClick={onClose}
-      className="fixed inset-0 z-50 flex items-center justify-center bg-black/85 p-4 backdrop-blur"
+      className="fixed inset-0 z-[100] flex items-center justify-center bg-black/85 p-4 backdrop-blur"
     >
       <div
-        className="relative w-full max-w-5xl overflow-hidden rounded-2xl border border-border-strong bg-bg-elev shadow-glow-strong"
+        className="relative flex max-h-[92vh] w-full max-w-5xl flex-col overflow-hidden rounded-2xl border border-border-strong bg-bg-elev shadow-glow-strong"
         onClick={(e) => e.stopPropagation()}
       >
-        <div className="flex items-start justify-between gap-3 border-b border-border/70 px-5 py-3.5">
+        <div className="flex flex-shrink-0 items-start justify-between gap-3 border-b border-border/70 px-5 py-3.5">
           <div className="min-w-0">
             <div className="text-[0.62rem] uppercase tracking-[0.18em] text-text-muted">
               {entry.env}
@@ -232,7 +237,7 @@ function TaskModal({
           <button
             aria-label="Close"
             onClick={onClose}
-            className="grid h-9 w-9 place-items-center rounded-md border border-border bg-panel hover:bg-panel-hover"
+            className="grid h-9 w-9 flex-shrink-0 place-items-center rounded-md border border-border bg-panel hover:bg-panel-hover"
           >
             <svg viewBox="0 0 24 24" className="h-4 w-4" fill="none" stroke="currentColor" strokeWidth="2">
               <path d="M6 6l12 12M18 6l-12 12" strokeLinecap="round" />
@@ -246,9 +251,10 @@ function TaskModal({
           controls
           loop
           playsInline
-          className="block w-full bg-black"
+          className="block max-h-[calc(92vh-72px)] w-full bg-black object-contain"
         />
       </div>
-    </div>
+    </div>,
+    document.body,
   );
 }

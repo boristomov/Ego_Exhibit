@@ -71,6 +71,9 @@
   }
   .reveal.is-visible {
     opacity: 1;
-    transform: translateY(0);
+    /* `transform: none` (not translateY(0)) so the element stops being a
+       containing-block for fixed-position descendants once the entrance
+       animation is done — keeps modals/popovers anchored to the viewport. */
+    transform: none;
   }
 }
