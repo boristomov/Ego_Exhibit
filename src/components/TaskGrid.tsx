@@ -33,7 +33,7 @@ export function TaskGrid({ tasks }: { tasks: TaskEntry[] }) {
           </div>
         </div>
 
-        <div className="reveal mt-10 grid grid-cols-2 gap-3 sm:grid-cols-3 md:gap-4 lg:grid-cols-4 xl:grid-cols-5">
+        <div className="reveal mt-10 grid grid-cols-1 gap-3 sm:grid-cols-2 md:gap-4 lg:grid-cols-3 xl:grid-cols-4">
           {tasks.map((t) => (
             <TaskTile key={t.slug} entry={t} />
           ))}
@@ -112,7 +112,7 @@ function TaskTile({ entry }: { entry: TaskEntry }) {
         onFocus={() => setHovering(true)}
         onBlur={() => setHovering(false)}
         aria-label={`Open ${display}`}
-        className="group relative aspect-[4/5] w-full overflow-hidden rounded-xl border border-border-strong/60 bg-black text-left shadow-soft transition duration-500 hover:border-accent/70 hover:shadow-glow"
+        className="group relative aspect-[16/10] w-full overflow-hidden rounded-xl border border-border-strong/60 bg-black text-left shadow-soft transition duration-500 hover:border-accent/70 hover:shadow-glow"
       >
         <video
           ref={videoRef}

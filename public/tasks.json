@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-05-27T03:47:22.033Z",
+  "generatedAt": "2026-05-27T08:02:14.263Z",
   "totalSessions": 500,
   "totalDurationSec": 36226.67,
   "totalTasks": 23,
@@ -141,6 +141,54 @@
       "episodes": 10,
       "durationSec": 236.89999999999998,
       "sessionId": "20260412_235733"
+    },
+    {
+      "task": "Tie shoelaces",
+      "slug": "tie-shoelaces",
+      "env": "Floor / footwear",
+      "episodes": 50,
+      "durationSec": 2154.59,
+      "sessionId": "20260517_183240"
+    },
+    {
+      "task": "Package a product",
+      "slug": "package-product",
+      "env": "Packaging station",
+      "episodes": 35,
+      "durationSec": 2443.4599999999996,
+      "sessionId": "20260521_163305"
+    },
+    {
+      "task": "Pack Band-Aid box of bandages",
+      "slug": "pack-bandaids",
+      "env": "Counter / packaging",
+      "episodes": 30,
+      "durationSec": 1514.88,
+      "sessionId": "20260518_150832"
+    },
+    {
+      "task": "Reload Stapler",
+      "slug": "reload-stapler",
+      "env": "Desk / office",
+      "episodes": 30,
+      "durationSec": 794.8700000000001,
+      "sessionId": "20260514_191706"
+    },
+    {
+      "task": "Organize office supplies",
+      "slug": "office-supplies",
+      "env": "Desk / drawer",
+      "episodes": 20,
+      "durationSec": 1547.61,
+      "sessionId": "20260514_161658"
+    },
+    {
+      "task": "Put groceries in the fridge",
+      "slug": "groceries-fridge",
+      "env": "Kitchen / fridge",
+      "episodes": 2,
+      "durationSec": 155.03,
+      "sessionId": "20260414_023931"
     }
   ]
 }

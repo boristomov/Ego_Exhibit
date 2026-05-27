@@ -46,6 +46,12 @@ const TASKS = [
   { task: "Unbutton a shirt", slug: "unbutton-shirt", env: "Clothing close-up" },
   { task: "Clean Restroom with toilet brush", slug: "clean-restroom", env: "Restroom" },
   { task: "Plug in ethernet cord in server rack", slug: "ethernet", env: "Server rack" },
+  { task: "Tie shoelaces", slug: "tie-shoelaces", env: "Floor / footwear" },
+  { task: "Package a product", slug: "package-product", env: "Packaging station" },
+  { task: "Pack Band-Aid box of bandages", slug: "pack-bandaids", env: "Counter / packaging" },
+  { task: "Reload Stapler", slug: "reload-stapler", env: "Desk / office" },
+  { task: "Organize office supplies", slug: "office-supplies", env: "Desk / drawer" },
+  { task: "Put groceries in the fridge", slug: "groceries-fridge", env: "Kitchen / fridge" },
 ];
 
 function run(cmd, args, opts = {}) {
