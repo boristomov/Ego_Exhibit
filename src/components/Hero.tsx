@@ -1,4 +1,4 @@
-import { ArrowRight, Activity } from "lucide-react";
+import { ArrowRight, Mail } from "lucide-react";
 
 export function Hero() {
   return (
@@ -47,13 +47,8 @@ export function Hero() {
             <a href="#tasks" className="btn-primary">
               Explore the dataset <ArrowRight size={15} />
             </a>
-            <a
-              href="https://boristomov.github.io/Ego_Dashboard/"
-              target="_blank"
-              rel="noopener"
-              className="btn-secondary"
-            >
-              <Activity size={14} /> Live operations dashboard
+            <a href="#contact" className="btn-secondary">
+              <Mail size={14} /> Talk to the team
             </a>
           </div>
 
@@ -71,15 +66,15 @@ export function Hero() {
         {/* Video band — two synced annotation demos */}
         <div className="reveal mb-8 mt-10 grid grid-cols-1 gap-4 md:mb-10 md:mt-12 md:grid-cols-2 md:gap-5">
           <HeroVideo
-            src="/videos/hero/fold-clothing.mp4"
-            poster="/videos/posters/fold-clothing.jpg"
+            src={`${import.meta.env.BASE_URL}videos/hero/fold-clothing.mp4`}
+            poster={`${import.meta.env.BASE_URL}videos/posters/fold-clothing.jpg`}
             label="Fold Clothing"
             tagline="Soft-object manipulation · CVAT preannotations"
             accent="violet"
           />
           <HeroVideo
-            src="/videos/hero/organize-cords.mp4"
-            poster="/videos/posters/organize-cords.jpg"
+            src={`${import.meta.env.BASE_URL}videos/hero/organize-cords.mp4`}
+            poster={`${import.meta.env.BASE_URL}videos/posters/organize-cords.jpg`}
             label="Organize Cords"
             tagline="Fine-motor sorting · hand & object tracking"
             accent="cyan"

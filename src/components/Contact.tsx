@@ -1,4 +1,4 @@
-import { Mail, ExternalLink, ArrowUpRight } from "lucide-react";
+import { Mail, ArrowUpRight } from "lucide-react";
 
 const PEOPLE = [
   {
@@ -25,7 +25,7 @@ export function Contact() {
             aria-hidden
           />
 
-          <div className="reveal relative flex flex-col items-start gap-6 md:flex-row md:items-end md:justify-between">
+          <div className="reveal relative flex flex-col items-start gap-6">
             <div className="max-w-[60ch]">
               <span className="label-eyebrow">Get in touch</span>
               <h2 className="mt-4 text-[clamp(2.2rem,4.5vw,3.8rem)] font-semibold leading-tight tracking-tight">
@@ -38,14 +38,6 @@ export function Contact() {
                 profile that would map best to your manipulation training plan.
               </p>
             </div>
-            <a
-              href="https://boristomov.github.io/Ego_Dashboard/"
-              target="_blank"
-              rel="noopener"
-              className="btn-secondary !text-[0.8rem]"
-            >
-              Open the operations dashboard <ExternalLink size={13} />
-            </a>
           </div>
 
           <div className="reveal relative mt-10 grid gap-4 md:grid-cols-2">

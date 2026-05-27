@@ -28,18 +28,16 @@ export function Nav() {
       }`}
     >
       <div className="container-wide flex h-14 items-center justify-between md:h-16">
-        <a href="#top" className="group flex items-center gap-2.5">
-          <span className="grid h-7 w-7 place-items-center rounded-lg bg-brand-gradient shadow-glow">
-            <svg viewBox="0 0 24 24" className="h-3.5 w-3.5 text-bg" fill="currentColor">
-              <path d="M6 9 L12 6 L18 9 L18 15 L12 18 L6 15 Z" stroke="currentColor" strokeWidth="1.5" fill="none" />
-              <circle cx="12" cy="12" r="2" />
-            </svg>
-          </span>
-          <span className="text-[0.95rem] font-semibold tracking-tight">
-            Thoth AI
-          </span>
+        <a href="#top" className="group flex items-center gap-3">
+          <img
+            src={`${import.meta.env.BASE_URL}thoth-logo.jpg`}
+            alt="Thoth AI"
+            width={40}
+            height={40}
+            className="h-9 w-9 rounded-lg shadow-glow ring-1 ring-white/10 md:h-10 md:w-10"
+          />
           <span className="hidden text-[0.72rem] uppercase tracking-[0.18em] text-text-muted sm:inline">
-            · Data for Robotics
+            Data for Robotics
           </span>
         </a>
 
