@@ -1,0 +1,146 @@
+{
+  "generatedAt": "2026-05-27T03:47:22.033Z",
+  "totalSessions": 500,
+  "totalDurationSec": 36226.67,
+  "totalTasks": 23,
+  "tasks": [
+    {
+      "task": "Wash dirty cooking and dining items",
+      "slug": "wash-cooking-items",
+      "env": "Kitchen / sink",
+      "episodes": 52,
+      "durationSec": 4820.86,
+      "sessionId": "20260413_221653"
+    },
+    {
+      "task": "Organize a toolbox",
+      "slug": "organize-toolbox",
+      "env": "Workshop / workbench",
+      "episodes": 27,
+      "durationSec": 3269.850000000001,
+      "sessionId": "20260414_153135"
+    },
+    {
+      "task": "Organize pencils_ markers and pens",
+      "slug": "organize-stationery",
+      "env": "Desk / office",
+      "displayName": "Organize pencils, markers and pens",
+      "episodes": 22,
+      "durationSec": 2815.01,
+      "sessionId": "20260428_153245"
+    },
+    {
+      "task": "Transfer clothes from washing machine to the dryer",
+      "slug": "transfer-clothes",
+      "env": "Laundry",
+      "episodes": 10,
+      "durationSec": 2005.44,
+      "sessionId": "20260423_220823"
+    },
+    {
+      "task": "Sweep trash in a dustpan and empty it out in a bin",
+      "slug": "sweep-trash",
+      "env": "Floor / bin area",
+      "episodes": 30,
+      "durationSec": 1842.8999999999999,
+      "sessionId": "20260512_223615"
+    },
+    {
+      "task": "Cook a tortilla",
+      "slug": "cook-tortilla",
+      "env": "Kitchen / stovetop",
+      "episodes": 11,
+      "durationSec": 1796.92,
+      "sessionId": "20260414_000124"
+    },
+    {
+      "task": "Extract 3D Printed Item and Clean Print Bed",
+      "slug": "3d-print",
+      "env": "Maker space",
+      "displayName": "Extract 3D-printed item and clean print bed",
+      "episodes": 20,
+      "durationSec": 1768.6099999999997,
+      "sessionId": "20260414_031253"
+    },
+    {
+      "task": "Insert new batteries in device",
+      "slug": "batteries",
+      "env": "Desk / device setup",
+      "episodes": 24,
+      "durationSec": 1740.8999999999999,
+      "sessionId": "20260423_142254"
+    },
+    {
+      "task": "Fold Clothing",
+      "slug": "fold-clothing",
+      "env": "Home / laundry surface",
+      "episodes": 32,
+      "durationSec": 1689.5699999999993,
+      "sessionId": "20260413_201925"
+    },
+    {
+      "task": "Load Dishwasher",
+      "slug": "load-dishwasher",
+      "env": "Kitchen / dishwasher",
+      "episodes": 12,
+      "durationSec": 1345.6599999999999,
+      "sessionId": "20260414_171854"
+    },
+    {
+      "task": "Change drill head attachment",
+      "slug": "change-drill-head",
+      "env": "Workshop / tools",
+      "episodes": 34,
+      "durationSec": 1345.3799999999997,
+      "sessionId": "20260423_170733"
+    },
+    {
+      "task": "Organize Audio Equipment",
+      "slug": "audio-equipment",
+      "env": "Audio / gear",
+      "episodes": 11,
+      "durationSec": 909.2700000000001,
+      "sessionId": "20260412_225932"
+    },
+    {
+      "task": "Organize cords and adapters",
+      "slug": "organize-cords",
+      "env": "Desk / electronics",
+      "episodes": 10,
+      "durationSec": 710.71,
+      "sessionId": "20260412_223810"
+    },
+    {
+      "task": "Set up a microphone stand with a microphone",
+      "slug": "microphone-stand",
+      "env": "Audio setup",
+      "episodes": 10,
+      "durationSec": 584.95,
+      "sessionId": "20260413_003824"
+    },
+    {
+      "task": "Unbutton a shirt",
+      "slug": "unbutton-shirt",
+      "env": "Clothing close-up",
+      "episodes": 13,
+      "durationSec": 488.17,
+      "sessionId": "20260423_162832"
+    },
+    {
+      "task": "Clean Restroom with toilet brush",
+      "slug": "clean-restroom",
+      "env": "Restroom",
+      "episodes": 5,
+      "durationSec": 245.13,
+      "sessionId": "20260414_193742"
+    },
+    {
+      "task": "Plug in ethernet cord in server rack",
+      "slug": "ethernet",
+      "env": "Server rack",
+      "episodes": 10,
+      "durationSec": 236.89999999999998,
+      "sessionId": "20260412_235733"
+    }
+  ]
+}
