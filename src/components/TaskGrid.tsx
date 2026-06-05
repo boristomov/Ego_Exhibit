@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState } from "react";
 import { createPortal } from "react-dom";
-import { Clock, Layers, MapPin, Play } from "lucide-react";
+import { ChevronDown, Clock, Layers, MapPin, Play } from "lucide-react";
 import type { TaskEntry } from "../lib/tasks";
 import { formatDuration } from "../lib/tasks";
 
@@ -10,43 +10,43 @@ import { formatDuration } from "../lib/tasks";
  * (poster only, label hidden); hovering a tile starts its video and reveals
  * the label/metadata. On touch devices we fall back to in-view autoplay with
  * the label always visible, since there's no hover.
+ *
+ * Presentational only: the gallery starts collapsed to a few rows and reveals
+ * the rest behind an expand button so it can live inside a single panel.
  */
 
-export function TaskGrid({ tasks }: { tasks: TaskEntry[] }) {
+const INITIAL_VISIBLE = 12;
+
+export function TaskInventory({ tasks }: { tasks: TaskEntry[] }) {
+  const [expanded, setExpanded] = useState(false);
+  const hasMore = tasks.length > INITIAL_VISIBLE;
+  const shown = expanded || !hasMore ? tasks : tasks.slice(0, INITIAL_VISIBLE);
+
   return (
-    <section id="tasks" className="relative py-20 md:py-28">
-      <div className="container-wide">
-        <div className="reveal flex flex-col items-start justify-between gap-6 md:flex-row md:items-end">
-          <div>
-            <span className="label-eyebrow">Recording inventory</span>
-            <h2 className="mt-3 max-w-[24ch] text-[clamp(2rem,4vw,3.4rem)] font-semibold leading-tight tracking-tight">
-              {tasks.length} task folders.{" "}
-              <span className="brand-grad">One pipeline.</span>
-            </h2>
-            <p className="mt-3 max-w-[58ch] text-text-muted">
-              Home-style and industrial manipulation tasks captured across
-              kitchens, workshops, laundry rooms, desks and server rooms — each
-              with hand and object preannotations ready for CVAT review.
-            </p>
-          </div>
-          <div className="text-[0.72rem] uppercase tracking-[0.18em] text-text-dim">
-            Hover any tile to preview · click for the full clip
-          </div>
-        </div>
-
-        <div className="reveal mt-10 grid grid-cols-1 gap-3 sm:grid-cols-2 md:gap-4 lg:grid-cols-3 xl:grid-cols-4">
-          {tasks.map((t) => (
-            <TaskTile key={t.slug} entry={t} />
-          ))}
-        </div>
-
-        <p className="reveal mt-10 max-w-[60ch] text-[0.85rem] text-text-muted">
-          Diverse objects, lighting and workspaces. Operators trained for
-          deliberate, slow motion without complex finger sequences — keeping
-          demonstrations trainable for robotic policies.
-        </p>
+    <div>
+      <div className="grid grid-cols-1 gap-3 sm:grid-cols-2 md:gap-4 lg:grid-cols-3 xl:grid-cols-4">
+        {shown.map((t) => (
+          <TaskTile key={t.slug} entry={t} />
+        ))}
       </div>
-    </section>
+
+      {hasMore && (
+        <div className="mt-6 flex justify-center">
+          <button
+            type="button"
+            onClick={() => setExpanded((e) => !e)}
+            className="btn-secondary"
+            aria-expanded={expanded}
+          >
+            {expanded ? "Show fewer" : `Show all ${tasks.length} tasks`}
+            <ChevronDown
+              size={15}
+              className={`transition-transform duration-300 ${expanded ? "rotate-180" : ""}`}
+            />
+          </button>
+        </div>
+      )}
+    </div>
   );
 }
 

@@ -1,17 +1,14 @@
 import { useEffect, useState } from "react";
 import { Nav } from "./components/Nav";
-import { Hero } from "./components/Hero";
-import { Stats } from "./components/Stats";
-import { TaskGrid } from "./components/TaskGrid";
-import { PipelineSection } from "./components/PipelineSection";
-import { QualitySection } from "./components/QualitySection";
-import { Contact } from "./components/Contact";
-import { Footer } from "./components/Footer";
+import { HomePage } from "./pages/HomePage";
+import { DatasetPage } from "./pages/DatasetPage";
 import { useReveal } from "./hooks/useReveal";
+import { useHashRoute } from "./hooks/useHashRoute";
 import type { TasksManifest } from "./lib/tasks";
 
 export function App() {
   const [manifest, setManifest] = useState<TasksManifest | null>(null);
+  const route = useHashRoute();
 
   useEffect(() => {
     const base = (import.meta.env.BASE_URL || "/").replace(/\/?$/, "/");
@@ -21,20 +18,18 @@ export function App() {
       .catch(() => setManifest(null));
   }, []);
 
-  useReveal();
+  // Re-bind reveal observers and reset scroll whenever the route swaps.
+  useReveal(`${route}:${manifest ? "ready" : "loading"}`);
+  useEffect(() => {
+    window.scrollTo({ top: 0 });
+    document.documentElement.dataset.route = route;
+  }, [route]);
 
   return (
     <>
-      <Nav />
-      <main>
-        <Hero />
-        <Stats manifest={manifest} />
-        <TaskGrid tasks={manifest?.tasks ?? []} />
-        <PipelineSection />
-        <QualitySection />
-        <Contact />
-      </main>
-      <Footer />
+      <Nav route={route} />
+      {route === "home" && <HomePage manifest={manifest} />}
+      {route === "dataset" && <DatasetPage manifest={manifest} />}
     </>
   );
 }

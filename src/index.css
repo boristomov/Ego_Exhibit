@@ -5,11 +5,37 @@
 @layer base {
   :root {
     color-scheme: dark;
+    /* Fixed nav footprint — used so 100vh panels pad content below the bar. */
+    --nav-h: 4.5rem;
     /* Slight horizontal scroll prevention from off-canvas glow elements. */
+  }
+  @media (min-width: 768px) {
+    :root {
+      --nav-h: 5.5rem;
+    }
   }
   html {
     -webkit-tap-highlight-color: transparent;
     scroll-behavior: smooth;
+  }
+  /* Full-screen per-section snapping on larger screens. Scoped to the home page
+     (.snap-page) so the dataset page scrolls normally. The footer lives inside
+     the final (contact) section, so the last screen never traps the scroll. */
+  @media (min-width: 768px) {
+    html {
+      scroll-snap-type: y mandatory;
+      scroll-padding-top: 0;
+    }
+    /* Dataset panels carry more content (the inventory expands), so use gentle
+       proximity snapping there — full-screen panels still snap, tall ones scroll
+       freely without trapping the wheel. */
+    html[data-route="dataset"] {
+      scroll-snap-type: y mandatory;
+    }
+    .snap-page > section,
+    .snap-soft > section {
+      scroll-snap-align: start;
+    }
   }
   body {
     @apply bg-bg text-text;
@@ -68,6 +94,11 @@
     transition:
       opacity 800ms cubic-bezier(0.16, 1, 0.3, 1),
       transform 800ms cubic-bezier(0.16, 1, 0.3, 1);
+  }
+  /* Full viewport section with padding for the transparent fixed navbar. */
+  .section-screen {
+    @apply relative box-border flex h-[100svh] flex-col overflow-hidden;
+    padding-top: var(--nav-h);
   }
   .reveal.is-visible {
     opacity: 1;

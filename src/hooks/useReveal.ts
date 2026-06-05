@@ -3,9 +3,10 @@ import { useEffect } from "react";
 /**
  * Light-weight scroll reveal — turns any element with the `.reveal` class
  * into a fade-in-up once it enters the viewport. Idempotent: re-runs safely
- * when new content mounts.
+ * when new content mounts. Pass a `key` (e.g. the active route) so the
+ * observer re-binds whenever the page swaps in fresh `.reveal` nodes.
  */
-export function useReveal() {
+export function useReveal(key?: unknown) {
   useEffect(() => {
     if (typeof window === "undefined") return;
     if (
@@ -26,7 +27,13 @@ export function useReveal() {
       },
       { rootMargin: "0px 0px -8% 0px", threshold: 0.08 },
     );
-    document.querySelectorAll(".reveal").forEach((n) => io.observe(n));
-    return () => io.disconnect();
-  }, []);
+    // Defer one frame so freshly-mounted route content is in the DOM.
+    const raf = requestAnimationFrame(() => {
+      document.querySelectorAll(".reveal:not(.is-visible)").forEach((n) => io.observe(n));
+    });
+    return () => {
+      cancelAnimationFrame(raf);
+      io.disconnect();
+    };
+  }, [key]);
 }

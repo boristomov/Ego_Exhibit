@@ -1,4 +1,5 @@
 import { Mail, ArrowUpRight } from "lucide-react";
+import { Footer } from "./Footer";
 
 const PEOPLE = [
   {
@@ -15,8 +16,12 @@ const PEOPLE = [
 
 export function Contact() {
   return (
-    <section id="contact" className="relative py-20 md:py-28">
-      <div className="container-wide">
+    <section
+      id="contact"
+      className="relative flex min-h-[100svh] flex-col md:h-[100svh]"
+    >
+      <div className="flex flex-1 items-center py-24 md:py-0">
+      <div className="container-wide w-full">
         <div className="relative overflow-hidden rounded-3xl border border-border bg-gradient-to-br from-accent/20 via-bg-elev to-cyan/15 px-6 py-12 shadow-glow-strong md:px-12 md:py-16">
           {/* Decorative grid + glow */}
           <div className="pointer-events-none absolute inset-0 grid-bg opacity-50" aria-hidden />
@@ -74,6 +79,8 @@ export function Contact() {
           </div>
         </div>
       </div>
+      </div>
+      <Footer />
     </section>
   );
 }

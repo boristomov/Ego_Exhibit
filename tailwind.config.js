@@ -72,10 +72,15 @@ export default {
           "0%, 100%": { opacity: "1" },
           "50%": { opacity: "0.4" },
         },
+        marquee: {
+          "0%": { transform: "translateX(0)" },
+          "100%": { transform: "translateX(-50%)" },
+        },
       },
       animation: {
         "fade-in-up": "fade-in-up 0.7s cubic-bezier(0.16,1,0.3,1) both",
         "slow-pan": "slow-pan 24s linear infinite alternate",
+        marquee: "marquee 60s linear infinite",
       },
     },
   },

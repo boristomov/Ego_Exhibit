@@ -1,64 +1,71 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
+import { navigate, type Route } from "../hooks/useHashRoute";
 
-const LINKS: { label: string; href: string }[] = [
-  { label: "Dataset", href: "#dataset" },
-  { label: "Tasks", href: "#tasks" },
-  { label: "Pipeline", href: "#pipeline" },
-  { label: "Quality", href: "#quality" },
-  { label: "Contact", href: "#contact" },
+type NavLink =
+  | { label: string; kind: "section"; id: string }
+  | { label: string; kind: "route"; route: Route };
+
+const LINKS: NavLink[] = [
+  { label: "Dataset", kind: "route", route: "dataset" },
 ];
 
-export function Nav() {
-  const [scrolled, setScrolled] = useState(false);
+export function Nav({ route }: { route: Route }) {
   const [open, setOpen] = useState(false);
 
-  useEffect(() => {
-    const onScroll = () => setScrolled(window.scrollY > 8);
-    onScroll();
-    window.addEventListener("scroll", onScroll, { passive: true });
-    return () => window.removeEventListener("scroll", onScroll);
-  }, []);
+  const go = (l: NavLink) => {
+    setOpen(false);
+    if (l.kind === "route") navigate(l.route);
+    else navigate("home", l.id);
+  };
+
+  const isActive = (l: NavLink) =>
+    l.kind === "route" && l.route === route;
 
   return (
     <header
-      className={`fixed inset-x-0 top-0 z-40 transition-all duration-300 ${
-        scrolled
-          ? "border-b border-border/60 bg-bg/75 backdrop-blur-xl"
-          : "bg-transparent"
-      }`}
+      className={`fixed inset-x-0 top-0 z-40 bg-transparent pt-2 transition-all duration-300 md:pt-3`}
     >
-      <div className="container-wide flex h-14 items-center justify-between md:h-16">
-        <a href="#top" className="group flex items-center gap-3">
+      <div className="container-wide flex h-16 items-center justify-between md:h-[4.75rem]">
+        <button
+          onClick={() => navigate("home")}
+          className="group flex items-center gap-3"
+          aria-label="Thoth AI — home"
+        >
           <img
             src={`${import.meta.env.BASE_URL}thoth-logo.jpg`}
             alt="Thoth AI"
-            width={40}
-            height={40}
-            className="h-9 w-9 rounded-lg shadow-glow ring-1 ring-white/10 md:h-10 md:w-10"
+            width={56}
+            height={56}
+            className="h-11 w-11 rounded-xl shadow-glow ring-1 ring-white/10 transition group-hover:ring-white/25 md:h-14 md:w-14"
           />
-          <span className="hidden text-[0.72rem] uppercase tracking-[0.18em] text-text-muted sm:inline">
-            Data for Robotics
+          <span className="text-[1.02rem] font-semibold tracking-tight text-text md:text-[1.15rem]">
+            Thoth AI
           </span>
-        </a>
+        </button>
 
         <nav className="hidden items-center gap-7 md:flex">
           {LINKS.map((l) => (
-            <a
-              key={l.href}
-              href={l.href}
-              className="text-[0.82rem] font-medium text-text-muted transition hover:text-text"
+            <button
+              key={l.label}
+              onClick={() => go(l)}
+              className={`text-[0.82rem] font-medium transition hover:text-text ${
+                isActive(l) ? "text-text" : "text-text-muted"
+              }`}
             >
               {l.label}
-            </a>
+            </button>
           ))}
-          <a href="#contact" className="btn-primary !py-2 !px-4 !text-[0.78rem]">
+          <button
+            onClick={() => navigate("home", "contact")}
+            className="btn-primary !py-2 !px-4 !text-[0.78rem]"
+          >
             Get in touch
-          </a>
+          </button>
         </nav>
 
         <button
           aria-label="Open menu"
-          className="grid h-9 w-9 place-items-center rounded-md border border-border bg-panel/60 md:hidden"
+          className="grid h-10 w-10 place-items-center rounded-md border border-border bg-panel/60 md:hidden"
           onClick={() => setOpen((o) => !o)}
         >
           <svg viewBox="0 0 24 24" className="h-4 w-4" fill="none" stroke="currentColor" strokeWidth="2">
@@ -75,22 +82,25 @@ export function Nav() {
         <div className="md:hidden">
           <div className="container-wide flex flex-col gap-1 border-t border-border/60 bg-bg/95 py-3 backdrop-blur-xl">
             {LINKS.map((l) => (
-              <a
-                key={l.href}
-                href={l.href}
-                className="rounded-md px-2 py-2 text-[0.95rem] font-medium text-text-muted transition hover:bg-panel hover:text-text"
-                onClick={() => setOpen(false)}
+              <button
+                key={l.label}
+                onClick={() => go(l)}
+                className={`rounded-md px-2 py-2 text-left text-[0.95rem] font-medium transition hover:bg-panel hover:text-text ${
+                  isActive(l) ? "text-text" : "text-text-muted"
+                }`}
               >
                 {l.label}
-              </a>
+              </button>
             ))}
-            <a
-              href="#contact"
+            <button
+              onClick={() => {
+                setOpen(false);
+                navigate("home", "contact");
+              }}
               className="mt-2 inline-flex justify-center rounded-full bg-text px-4 py-2 text-[0.85rem] font-semibold text-bg"
-              onClick={() => setOpen(false)}
             >
               Get in touch
-            </a>
+            </button>
           </div>
         </div>
       )}
