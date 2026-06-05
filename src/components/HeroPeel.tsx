@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useRef, useState } from "react";
-import { MoveHorizontal, MoveVertical } from "lucide-react";
+import { MoveHorizontal } from "lucide-react";
 
 type PeelVideo = {
   src: string;
@@ -7,29 +7,29 @@ type PeelVideo = {
 };
 
 /**
- * Shared inset frame for the peel surface and the overlay labels/CTAs so corners
- * align. Full-bleed width on mobile; insets on desktop so the clip can diffuse
- * into the surrounding texture.
+ * Shared inset frame for the overlay labels/CTAs so corners align with the
+ * video. Full-bleed width on mobile; insets on desktop.
  */
 export const PEEL_FRAME =
   "left-0 right-0 top-[12%] bottom-[9%] md:left-[7%] md:right-[7%] md:top-[9%] md:bottom-[6.5%]";
 
 /**
- * Inner frame for the video surface itself. On desktop it is sized natively
- * ~25% smaller than {@link PEEL_FRAME} (centered) instead of using a CSS
- * `transform: scale()`, so the 1916px source is downscaled in a single pass and
- * stays crisp on hi-DPI screens (a transform would rasterize at the full layout
- * size and then resample again, softening the video). Full-bleed on mobile.
+ * Desktop frame for the video surface — sized natively (no CSS transform) so the
+ * 1916px source downscales in a single pass and stays crisp on hi-DPI screens.
+ * Used by the task tags so they align with the video. On mobile the video is laid
+ * out as a landscape band in normal flow (see Hero), not via this frame.
  */
 export const PEEL_FRAME_VIDEO =
   "left-0 right-0 top-[12%] bottom-[9%] md:left-[17.75%] md:right-[17.75%] md:top-[19.5%] md:bottom-[17%]";
 
 /**
- * Full-bleed "peel" surface: stacks two looping clips and clips the top one
- * along a draggable seam that peels back to reveal the second. The seam is a
- * vertical diagonal on desktop (drag left/right) and a horizontal diagonal on
- * mobile (drag up/down) so it reads well in portrait.
+ * "Peel" surface: stacks two looping clips and clips the top one along a
+ * draggable diagonal seam that peels back to reveal the second. The seam is a
+ * vertical diagonal (drag left/right) on every screen — on mobile this is a
+ * landscape band, so a left/right peel reads naturally and never fights the
+ * page's vertical scroll.
  *
+ * Fills its parent (absolute inset-0); the parent controls placement/size.
  * The seam is driven by direct DOM writes inside one rAF loop (no React render
  * per frame) so dragging and the auto-sweep stay perfectly smooth.
  */
@@ -52,21 +52,6 @@ export function HeroPeel({
   const draggingRef = useRef(false);
   const rafRef = useRef<number | null>(null);
   const [auto, setAuto] = useState(true);
-  // true = vertical seam (desktop), false = horizontal seam (mobile portrait)
-  const [vertical, setVertical] = useState(true);
-  const verticalRef = useRef(true);
-
-  useEffect(() => {
-    if (typeof window === "undefined") return;
-    const mq = window.matchMedia("(min-width: 768px)");
-    const update = () => {
-      verticalRef.current = mq.matches;
-      setVertical(mq.matches);
-    };
-    update();
-    mq.addEventListener("change", update);
-    return () => mq.removeEventListener("change", update);
-  }, []);
 
   const apply = useCallback(
     (raw: number) => {
@@ -74,46 +59,23 @@ export function HeroPeel({
       posRef.current = p;
       const a = p + tilt;
       const b = p - tilt;
-      if (verticalRef.current) {
-        const clip = `polygon(0% 0%, ${a}% 0%, ${b}% 100%, 0% 100%)`;
-        if (topRef.current) {
-          topRef.current.style.clipPath = clip;
-          topRef.current.style.setProperty("-webkit-clip-path", clip);
-        }
-        if (lineRef.current) {
-          lineRef.current.setAttribute("x1", String(a));
-          lineRef.current.setAttribute("y1", "0");
-          lineRef.current.setAttribute("x2", String(b));
-          lineRef.current.setAttribute("y2", "100");
-        }
-        if (handleRef.current) {
-          handleRef.current.style.left = `${p}%`;
-          handleRef.current.style.top = "50%";
-        }
-        if (glowRef.current) {
-          glowRef.current.style.left = `${p}%`;
-          glowRef.current.style.top = "";
-        }
-      } else {
-        const clip = `polygon(0% 0%, 100% 0%, 100% ${b}%, 0% ${a}%)`;
-        if (topRef.current) {
-          topRef.current.style.clipPath = clip;
-          topRef.current.style.setProperty("-webkit-clip-path", clip);
-        }
-        if (lineRef.current) {
-          lineRef.current.setAttribute("x1", "0");
-          lineRef.current.setAttribute("y1", String(a));
-          lineRef.current.setAttribute("x2", "100");
-          lineRef.current.setAttribute("y2", String(b));
-        }
-        if (handleRef.current) {
-          handleRef.current.style.top = `${p}%`;
-          handleRef.current.style.left = "50%";
-        }
-        if (glowRef.current) {
-          glowRef.current.style.top = `${p}%`;
-          glowRef.current.style.left = "";
-        }
+      const clip = `polygon(0% 0%, ${a}% 0%, ${b}% 100%, 0% 100%)`;
+      if (topRef.current) {
+        topRef.current.style.clipPath = clip;
+        topRef.current.style.setProperty("-webkit-clip-path", clip);
+      }
+      if (lineRef.current) {
+        lineRef.current.setAttribute("x1", String(a));
+        lineRef.current.setAttribute("y1", "0");
+        lineRef.current.setAttribute("x2", String(b));
+        lineRef.current.setAttribute("y2", "100");
+      }
+      if (handleRef.current) {
+        handleRef.current.style.left = `${p}%`;
+        handleRef.current.style.top = "50%";
+      }
+      if (glowRef.current) {
+        glowRef.current.style.left = `${p}%`;
       }
     },
     [tilt],
@@ -129,19 +91,14 @@ export function HeroPeel({
     const w = el.offsetWidth;
     const h = el.offsetHeight;
     if (!w || !h) return;
-    if (verticalRef.current) {
-      const deg = (Math.atan2(-2 * (tilt / 100) * w, h) * 180) / Math.PI;
-      g.style.transform = `skewX(${deg}deg)`;
-    } else {
-      const deg = (Math.atan2(-2 * (tilt / 100) * h, w) * 180) / Math.PI;
-      g.style.transform = `skewY(${deg}deg)`;
-    }
+    const deg = (Math.atan2(-2 * (tilt / 100) * w, h) * 180) / Math.PI;
+    g.style.transform = `skewX(${deg}deg)`;
   }, [tilt]);
 
   useEffect(() => {
     apply(posRef.current);
     updateSkew();
-  }, [apply, updateSkew, vertical]);
+  }, [apply, updateSkew]);
 
   useEffect(() => {
     const onResize = () => updateSkew();
@@ -172,15 +129,11 @@ export function HeroPeel({
   }, [auto, apply]);
 
   const setFromClient = useCallback(
-    (clientX: number, clientY: number) => {
+    (clientX: number) => {
       const el = wrapRef.current;
       if (!el) return;
       const rect = el.getBoundingClientRect();
-      if (verticalRef.current) {
-        apply(((clientX - rect.left) / rect.width) * 100);
-      } else {
-        apply(((clientY - rect.top) / rect.height) * 100);
-      }
+      apply(((clientX - rect.left) / rect.width) * 100);
     },
     [apply],
   );
@@ -189,7 +142,7 @@ export function HeroPeel({
     const onMove = (e: PointerEvent) => {
       if (!draggingRef.current) return;
       e.preventDefault();
-      setFromClient(e.clientX, e.clientY);
+      setFromClient(e.clientX);
     };
     const onUp = () => {
       draggingRef.current = false;
@@ -204,15 +157,13 @@ export function HeroPeel({
     };
   }, [setFromClient]);
 
-  const startDrag = (clientX: number, clientY: number) => {
+  const startDrag = (clientX: number) => {
     setAuto(false);
     draggingRef.current = true;
-    setFromClient(clientX, clientY);
+    setFromClient(clientX);
   };
 
-  const initialClip = vertical
-    ? "polygon(0% 0%, 65% 0%, 51% 100%, 0% 100%)"
-    : "polygon(0% 0%, 100% 0%, 100% 51%, 0% 65%)";
+  const initialClip = "polygon(0% 0%, 65% 0%, 51% 100%, 0% 100%)";
   // Fades all four edges to transparent so the clip melts into the texture.
   const edgeMask =
     "linear-gradient(to right, transparent, #000 11%, #000 89%, transparent), linear-gradient(to bottom, transparent, #000 11%, #000 89%, transparent)";
@@ -220,15 +171,8 @@ export function HeroPeel({
   return (
     <div
       ref={wrapRef}
-      onPointerDown={(e) => {
-        // On mobile (horizontal seam) let touches scroll the page; the handle
-        // initiates the peel instead.
-        if (e.pointerType === "touch" && !verticalRef.current) return;
-        startDrag(e.clientX, e.clientY);
-      }}
-      className={`group absolute ${PEEL_FRAME_VIDEO} touch-pan-y select-none overflow-hidden ${
-        vertical ? "cursor-ew-resize" : "cursor-ns-resize"
-      }`}
+      onPointerDown={(e) => startDrag(e.clientX)}
+      className="group absolute inset-0 cursor-ew-resize touch-pan-y select-none overflow-hidden"
     >
       {/* Masked stack — videos + accents fade at every edge so the clip
           diffuses into the purple grid texture behind it. */}
@@ -263,21 +207,15 @@ export function HeroPeel({
         <div className="pointer-events-none absolute inset-0 bg-[linear-gradient(315deg,rgba(0,0,0,0.92)_0%,rgba(0,0,0,0.72)_18%,rgba(0,0,0,0.4)_28%,transparent_42%)]" />
       </div>
 
-      {/* Techy trailing glow — a diffused pink→blue wash riding just past the
-          seam, screen-blended over the revealed clip. */}
+      {/* Techy trailing glow — a diffused pink wash riding just past the seam,
+          screen-blended over the revealed clip. */}
       <div
         ref={glowRef}
-        className={`pointer-events-none absolute z-[1] opacity-80 mix-blend-screen ${
-          vertical
-            ? "inset-y-0 w-[30%] [will-change:left]"
-            : "inset-x-0 h-[30%] [will-change:top]"
-        }`}
+        className="pointer-events-none absolute inset-y-0 z-[1] w-[30%] opacity-80 mix-blend-screen [will-change:left]"
         style={{
-          left: vertical ? "58%" : undefined,
-          top: vertical ? undefined : "58%",
-          background: vertical
-            ? "linear-gradient(to right, rgba(244,63,148,0.5) 0%, rgba(244,63,148,0.18) 36%, rgba(244,63,148,0) 72%)"
-            : "linear-gradient(to bottom, rgba(244,63,148,0.5) 0%, rgba(244,63,148,0.18) 36%, rgba(244,63,148,0) 72%)",
+          left: "58%",
+          background:
+            "linear-gradient(to right, rgba(244,63,148,0.5) 0%, rgba(244,63,148,0.18) 36%, rgba(244,63,148,0) 72%)",
           filter: "blur(50px)",
         }}
       />
@@ -302,19 +240,18 @@ export function HeroPeel({
         />
       </svg>
 
-      {/* Drag handle — simple round overlay; on mobile it also captures the
-          vertical drag (touch-action none) so the surface can still scroll. */}
+      {/* Drag handle — round overlay; captures the horizontal peel drag. */}
       <div
         ref={handleRef}
         onPointerDown={(e) => {
           e.stopPropagation();
-          startDrag(e.clientX, e.clientY);
+          startDrag(e.clientX);
         }}
         className="pointer-events-auto absolute left-1/2 top-1/2 z-10 -translate-x-1/2 -translate-y-1/2 touch-none"
         style={{ left: "58%" }}
       >
         <div className="grid h-11 w-11 place-items-center rounded-full border border-white/80 bg-black/30 text-white shadow-[0_2px_14px_rgba(0,0,0,0.55)] backdrop-blur-sm transition group-hover:scale-105">
-          {vertical ? <MoveHorizontal size={16} /> : <MoveVertical size={16} />}
+          <MoveHorizontal size={16} />
         </div>
       </div>
     </div>

@@ -59,7 +59,7 @@ export function DatasetPage({ manifest }: { manifest: TasksManifest | null }) {
           </p>
 
           <div
-            className="reveal mt-4 min-h-0 flex-1 overflow-y-auto overscroll-contain"
+            className="reveal mt-4 min-h-0 md:flex-1 md:overflow-y-auto md:overscroll-contain"
             style={{ transitionDelay: "160ms" }}
           >
             <TaskInventory tasks={manifest?.tasks ?? []} />

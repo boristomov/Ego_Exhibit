@@ -95,10 +95,19 @@
       opacity 800ms cubic-bezier(0.16, 1, 0.3, 1),
       transform 800ms cubic-bezier(0.16, 1, 0.3, 1);
   }
-  /* Full viewport section with padding for the transparent fixed navbar. */
+  /* Full viewport section with padding for the transparent fixed navbar.
+     Fixed-height + clipped only on desktop (where panels snap); on mobile it
+     grows with its content and the page scrolls normally. */
   .section-screen {
-    @apply relative box-border flex h-[100svh] flex-col overflow-hidden;
+    @apply relative box-border flex min-h-[100svh] flex-col;
     padding-top: var(--nav-h);
+  }
+  @media (min-width: 768px) {
+    .section-screen {
+      height: 100svh;
+      min-height: 0;
+      overflow: hidden;
+    }
   }
   .reveal.is-visible {
     opacity: 1;

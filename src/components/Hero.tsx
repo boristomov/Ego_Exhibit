@@ -3,16 +3,29 @@ import { HeroPeel, PEEL_FRAME, PEEL_FRAME_VIDEO } from "./HeroPeel";
 import { navigate } from "../hooks/useHashRoute";
 
 /**
- * Full-bleed peel hero. Two looping demos stacked behind a draggable diagonal
- * seam; task names sit in the top corners (desktop only), the headline
- * bottom-left and the CTAs top-right, arranged on a diagonal to catch the eye.
+ * Peel hero. Two looping demos stacked behind a draggable diagonal seam.
+ *
+ * Desktop: full-screen with absolute overlays — task names in the top corners,
+ * headline bottom-left and CTAs bottom-right on a diagonal.
+ * Mobile: a clean vertical stack — headline, a landscape peel band that diffuses
+ * into the texture, then the CTAs — so the landscape clips read naturally on a
+ * narrow screen instead of being cropped to a strip.
  */
 export function Hero() {
   const base = import.meta.env.BASE_URL;
+  const videoTop = {
+    src: `${base}videos/hero/fold-clothing.mp4`,
+    poster: `${base}videos/posters/fold-clothing.jpg`,
+  };
+  const videoBottom = {
+    src: `${base}videos/hero/organize-cords.mp4`,
+    poster: `${base}videos/posters/organize-cords.jpg`,
+  };
+
   return (
     <section
       id="top"
-      className="relative isolate h-[100svh] w-full overflow-hidden bg-bg"
+      className="relative isolate flex min-h-[100svh] w-full flex-col justify-center gap-5 overflow-hidden bg-bg px-5 pb-8 pt-20 md:block md:h-[100svh] md:min-h-0 md:gap-0 md:px-0 md:pb-0 md:pt-0"
     >
       {/* Purple squared texture from the main page, wrapping the inset video on
           every side so the clip can diffuse into it. */}
@@ -34,19 +47,46 @@ export function Hero() {
         aria-hidden
       />
 
-      <HeroPeel
-        top={{
-          src: `${base}videos/hero/fold-clothing.mp4`,
-          poster: `${base}videos/posters/fold-clothing.jpg`,
-        }}
-        bottom={{
-          src: `${base}videos/hero/organize-cords.mp4`,
-          poster: `${base}videos/posters/organize-cords.jpg`,
-        }}
-      />
+      {/* Mobile-only headline (above the band) */}
+      <div className="reveal relative z-20 w-full min-w-0 md:hidden">
+        <h1 className="text-[clamp(1.9rem,7.5vw,2.7rem)] font-semibold leading-[1.02] tracking-tight text-white drop-shadow-[0_2px_18px_rgba(0,0,0,0.6)]">
+          Egocentric data for{" "}
+          <span className="brand-grad">humanoid manipulation</span> policies.
+        </h1>
+        <p className="mt-3 max-w-[46ch] text-[0.95rem] leading-relaxed text-white/80">
+          Production-grade RGB-D capture, robotics-native MCAP streams and
+          supervised annotation on real human demonstrations.
+        </p>
+      </div>
 
-      {/* Task names — aligned to the (natively smaller) video, desktop only */}
-      <div className={`pointer-events-none absolute ${PEEL_FRAME_VIDEO} reveal z-20 hidden md:block`} style={{ transitionDelay: "260ms" }}>
+      {/* Peel surface — landscape band in flow on mobile, absolute frame on desktop */}
+      <div className="relative z-10 mx-auto aspect-[16/10] w-full min-w-0 max-w-[34rem] md:absolute md:z-auto md:mx-0 md:aspect-auto md:w-auto md:max-w-none md:left-[17.75%] md:right-[17.75%] md:top-[19.5%] md:bottom-[17%]">
+        <HeroPeel top={videoTop} bottom={videoBottom} />
+      </div>
+
+      {/* Mobile-only CTAs (below the band) */}
+      <div className="reveal relative z-20 flex w-full min-w-0 flex-col gap-3 md:hidden">
+        <button
+          type="button"
+          onClick={() => navigate("dataset")}
+          className="w-full justify-center !py-3.5 !text-[0.92rem] btn-primary"
+        >
+          Explore full dataset <ArrowRight size={16} />
+        </button>
+        <button
+          type="button"
+          onClick={() => navigate("home", "contact")}
+          className="inline-flex w-full items-center justify-center gap-2 rounded-full border border-white/30 bg-black/40 py-3.5 text-[0.92rem] font-medium text-white backdrop-blur transition active:scale-[0.98]"
+        >
+          <Mail size={15} /> Talk to the team
+        </button>
+      </div>
+
+      {/* Task names — aligned to the video, desktop only */}
+      <div
+        className={`pointer-events-none absolute ${PEEL_FRAME_VIDEO} reveal z-20 hidden md:block`}
+        style={{ transitionDelay: "260ms" }}
+      >
         <div className="absolute left-0 top-0 p-6 md:p-12">
           <TaskTag label="Fold Clothing" tagline="Soft-object manipulation" dot="bg-accent-bright" />
         </div>
@@ -55,8 +95,8 @@ export function Hero() {
         </div>
       </div>
 
-      {/* Headline (bottom-left) + CTAs (bottom-right) */}
-      <div className={`pointer-events-none absolute ${PEEL_FRAME} z-20`}>
+      {/* Headline (bottom-left) + CTAs (bottom-right) — desktop only */}
+      <div className={`pointer-events-none absolute ${PEEL_FRAME} z-20 hidden md:block`}>
         <div className="absolute inset-x-0 bottom-0 p-6 md:p-12">
           <div className="flex flex-col gap-6 md:flex-row md:items-end md:justify-between">
             {/* Headline */}
