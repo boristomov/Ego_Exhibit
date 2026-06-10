@@ -59,8 +59,7 @@ export function DatasetPage({ manifest }: { manifest: TasksManifest | null }) {
                   <span className="pointer-events-none absolute inset-0 -translate-x-full bg-gradient-to-r from-transparent via-white/15 to-transparent transition-transform duration-700 ease-out group-hover:translate-x-full" />
                 </a>
                 <p className="mt-1.5 text-[0.7rem] leading-snug text-text-muted">
-                  Includes a demo dataset you can download and test out for
-                  yourself.
+                  Download this data and test it out for yourself.
                 </p>
               </div>
             </div>
