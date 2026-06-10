@@ -1,10 +1,12 @@
-import { Clock, Database, Layers } from "lucide-react";
+import { ArrowUpRight, Clock, Compass, Database, Layers } from "lucide-react";
 import { TaskInventory } from "../components/TaskGrid";
 import { DatasetPackageSection } from "../components/DatasetPackageSection";
 import { PipelineSection } from "../components/PipelineSection";
 import { Footer } from "../components/Footer";
 import type { TasksManifest } from "../lib/tasks";
 import { formatHours } from "../lib/tasks";
+
+const DATASET_BROWSER_URL = "https://boristomov.github.io/Ego_Dashboard";
 
 /**
  * Pilot dataset — three viewport panels plus footer: task inventory, package
@@ -28,13 +30,42 @@ export function DatasetPage({ manifest }: { manifest: TasksManifest | null }) {
         />
 
         <div className="container-wide flex min-h-0 flex-1 flex-col py-4 md:py-6">
-          <div className="flex shrink-0 flex-col gap-4 sm:flex-row sm:items-end sm:justify-between">
-            <h1
-              className="reveal text-[clamp(1.6rem,3.2vw,2.6rem)] font-semibold leading-tight tracking-tight"
-            >
-              Task <span className="brand-grad">inventory</span>
-            </h1>
-            <div className="grid w-full grid-cols-3 gap-2 sm:w-auto sm:gap-2.5">
+          <div className="flex shrink-0 flex-col gap-4 lg:flex-row lg:items-end lg:justify-between">
+            <div className="flex flex-col gap-3 md:flex-row md:items-center md:gap-7">
+              <h1
+                className="reveal text-[clamp(1.6rem,3.2vw,2.6rem)] font-semibold leading-tight tracking-tight"
+              >
+                Task <span className="brand-grad">inventory</span>
+              </h1>
+
+              {/* Dataset Browser CTA */}
+              <div className="reveal" style={{ transitionDelay: "120ms" }}>
+                <a
+                  href={DATASET_BROWSER_URL}
+                  target="_blank"
+                  rel="noreferrer"
+                  className="group relative inline-flex items-center gap-2.5 overflow-hidden rounded-full border border-accent/50 bg-gradient-to-r from-accent/25 via-panel/60 to-cyan/20 px-5 py-2.5 text-[0.88rem] font-semibold text-white backdrop-blur transition duration-300 hover:border-accent-bright hover:shadow-glow"
+                >
+                  <Compass
+                    size={15}
+                    className="text-accent-bright transition-transform duration-500 group-hover:rotate-[60deg]"
+                  />
+                  Try out our Dataset Browser
+                  <ArrowUpRight
+                    size={14}
+                    className="text-text-muted transition-transform duration-300 group-hover:-translate-y-0.5 group-hover:translate-x-0.5 group-hover:text-white"
+                  />
+                  {/* sheen sweep on hover */}
+                  <span className="pointer-events-none absolute inset-0 -translate-x-full bg-gradient-to-r from-transparent via-white/15 to-transparent transition-transform duration-700 ease-out group-hover:translate-x-full" />
+                </a>
+                <p className="mt-1.5 text-[0.7rem] leading-snug text-text-muted">
+                  Includes a demo dataset you can download and test out for
+                  yourself.
+                </p>
+              </div>
+            </div>
+
+            <div className="grid w-full grid-cols-3 gap-2 sm:gap-2.5 lg:w-auto">
               <BigStat
                 icon={Layers}
                 value={episodes.toLocaleString()}
