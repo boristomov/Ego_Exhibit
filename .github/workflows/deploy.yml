@@ -35,8 +35,9 @@ jobs:
 
       - name: Build site
         env:
-          # Project-pages base path — overridden if you wire up a custom domain.
-          VITE_BASE: /${{ github.event.repository.name }}/
+          # Served at the root of the custom domain (robotics.aithoth.com), so the
+          # base path is "/". For plain project pages it would be /<repo-name>/.
+          VITE_BASE: /
         run: npm run build
 
       - name: Setup Pages
